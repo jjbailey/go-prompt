@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"syscall"
 
-	prompt "github.com/c-bata/go-prompt"
-	"github.com/c-bata/go-prompt/internal/term"
+	prompt "github.com/jjbailey/go-prompt"
+	"github.com/jjbailey/go-prompt/internal/term"
 )
 
 func main() {
