@@ -21,6 +21,9 @@ type ExitChecker func(in string, breakline bool) bool
 // Completer should return the suggest item from Document.
 type Completer func(Document) []Suggest
 
+// Hack to let callers know that the user backspaced out of the prompt
+var BackedOut bool
+
 // Prompt is core struct of go-prompt.
 type Prompt struct {
 	in                ConsoleParser
@@ -64,6 +67,9 @@ func (p *Prompt) Run() {
 	winSizeCh := make(chan *WinSize)
 	stopHandleSignalCh := make(chan struct{})
 	go p.handleSignals(exitCh, winSizeCh, stopHandleSignalCh)
+
+	// reset go-prompt BackedOut flag
+	BackedOut = false
 
 	for {
 		select {
@@ -145,9 +151,15 @@ func (p *Prompt) feed(b []byte) (shouldExit bool, exec *Exec) {
 			}
 			return
 		}
-	case ControlD, ControlH:
+	case ControlD:
 		if p.buf.Text() == "" {
 			shouldExit = true
+			return
+		}
+	case ControlH:
+		if p.buf.Text() == "" {
+			shouldExit = true
+			BackedOut = true
 			return
 		}
 	case NotDefined:

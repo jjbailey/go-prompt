@@ -23,6 +23,9 @@ func OptionWriter(x ConsoleWriter) Option {
 
 // OptionTitle to set title displayed at the header bar of terminal.
 func OptionTitle(x string) Option {
+	if x == "" {
+		return nil
+	}
 	return func(p *Prompt) error {
 		p.renderer.title = x
 		return nil
