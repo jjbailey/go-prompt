@@ -11,6 +11,6 @@ other Linux programs, such as Vim, which enable users to backspace out of prompt
 
 ### Other Changes
 
- - Upgrade Golang from version 1.14 to 1.24.7
- - In history.go, change copy loop to copy()
- - In output_vt100.go, attempt to not clobber an xterm title with an empty string
+- Upgrade Golang from version 1.14 to 1.24.7
+- In history.go, change copy loop to copy()
+- In output_vt100.go, attempt to not clobber an xterm title with an empty string
