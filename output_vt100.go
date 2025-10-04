@@ -178,6 +178,10 @@ func (w *VT100Writer) ScrollUp() {
 
 // SetTitle sets a title of terminal window.
 func (w *VT100Writer) SetTitle(title string) {
+	if title == "" {
+		return
+	}
+
 	titleBytes := []byte(title)
 	patterns := []struct {
 		from []byte
