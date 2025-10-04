@@ -68,9 +68,6 @@ func (p *Prompt) Run() {
 	stopHandleSignalCh := make(chan struct{})
 	go p.handleSignals(exitCh, winSizeCh, stopHandleSignalCh)
 
-	// reset go-prompt BackedOut flag
-	BackedOut = false
-
 	for {
 		select {
 		case b := <-bufCh:
@@ -121,9 +118,13 @@ func (p *Prompt) Run() {
 func (p *Prompt) feed(b []byte) (shouldExit bool, exec *Exec) {
 	key := GetKey(b)
 	p.buf.lastKeyStroke = key
+
 	// completion
 	completing := p.completion.Completing()
 	p.handleCompletionKeyBinding(key, completing)
+
+	// reset go-prompt BackedOut flag
+	BackedOut = false
 
 	switch key {
 	case Enter, ControlJ, ControlM:
