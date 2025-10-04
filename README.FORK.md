@@ -3,9 +3,9 @@
 This repository is a fork of github.com/c-bata/go-prompt, written to add
 a minor change to the prompt.go file.
 
-In the c-bata implementation, to exit a prompt without taking any action, a
-user must press [ENTER] with no other input at the prompt, in other words,
-enter a blank line. This change to prompt.go enables a user to press [BACKSPACE]
+In the c-bata implementation, to exit a prompt without taking any action,
+users must press [ENTER] with no other input at the prompt, in other words,
+enter a blank line. This change to prompt.go enables users to press [BACKSPACE]
 on an empty line and achieve the same result. This UX behavior is similar to
 other Linux programs, such as Vim, which enable users to backspace out of prompts.
 
