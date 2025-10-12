@@ -338,7 +338,7 @@ func (d *Document) GetCursorRightPosition(count int) int {
 	if len(d.CurrentLineAfterCursor()) > count {
 		return count
 	}
-	return len([]rune(d.CurrentLineAfterCursor()))
+	return len(d.CurrentLineAfterCursor())
 }
 
 // GetCursorUpPosition return the relative cursor position (character index) where we would be

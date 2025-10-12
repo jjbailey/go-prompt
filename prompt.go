@@ -264,6 +264,7 @@ func (p *Prompt) Input() string {
 			if shouldExit, e := p.feed(b); shouldExit {
 				p.renderer.BreakLine(p.buf)
 				stopReadBufCh <- struct{}{}
+				p.tearDown()
 				return ""
 			} else if e != nil {
 				// Stop goroutine to run readBuffer function

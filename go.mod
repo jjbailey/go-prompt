@@ -1,6 +1,6 @@
 module github.com/jjbailey/go-prompt
 
-go 1.24.7
+go 1.24.8
 
 require (
 	github.com/mattn/go-colorable v0.1.14
