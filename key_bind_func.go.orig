@@ -1,7 +1,5 @@
 package prompt
 
-import "unicode/utf8"
-
 // GoLineEnd Go to the End of the line
 func GoLineEnd(buf *Buffer) {
 	x := []rune(buf.Document().TextAfterCursor())
@@ -21,11 +19,7 @@ func DeleteChar(buf *Buffer) {
 
 // DeleteWord Delete word before the cursor
 func DeleteWord(buf *Buffer) {
-	textBeforeCursor := buf.Document().TextBeforeCursor()
-	byteIndexStartOfWord := buf.Document().FindStartOfPreviousWordWithSpace()
-	runesBeforeWord := utf8.RuneCountInString(textBeforeCursor[:byteIndexStartOfWord])
-	runesToDelete := len([]rune(textBeforeCursor)) - runesBeforeWord
-	buf.DeleteBeforeCursor(runesToDelete)
+	buf.DeleteBeforeCursor(len([]rune(buf.Document().TextBeforeCursor())) - buf.Document().FindStartOfPreviousWordWithSpace())
 }
 
 // DeleteBeforeChar Go to Backspace
@@ -45,17 +39,10 @@ func GoLeftChar(buf *Buffer) {
 
 // GoRightWord Forward one word
 func GoRightWord(buf *Buffer) {
-	textAfterCursor := buf.Document().TextAfterCursor()
-	byteIndexEndOfWord := buf.Document().FindEndOfCurrentWordWithSpace()
-	runesToMove := utf8.RuneCountInString(textAfterCursor[:byteIndexEndOfWord])
-	buf.CursorRight(runesToMove)
+	buf.CursorRight(buf.Document().FindEndOfCurrentWordWithSpace())
 }
 
 // GoLeftWord Backward one word
 func GoLeftWord(buf *Buffer) {
-	textBeforeCursor := buf.Document().TextBeforeCursor()
-	byteIndexStartOfWord := buf.Document().FindStartOfPreviousWordWithSpace()
-	runesBeforeWord := utf8.RuneCountInString(textBeforeCursor[:byteIndexStartOfWord])
-	runesToMove := len([]rune(textBeforeCursor)) - runesBeforeWord
-	buf.CursorLeft(runesToMove)
+	buf.CursorLeft(len([]rune(buf.Document().TextBeforeCursor())) - buf.Document().FindStartOfPreviousWordWithSpace())
 }
