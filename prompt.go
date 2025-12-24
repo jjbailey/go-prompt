@@ -24,6 +24,9 @@ type Completer func(Document) []Suggest
 // Hack to let callers know that the user backspaced out of the prompt
 var BackedOut bool
 
+// Hack to write the prefix raw
+var RawPrefix bool
+
 // Prompt is core struct of go-prompt.
 type Prompt struct {
 	in                ConsoleParser

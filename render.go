@@ -7,9 +7,6 @@ import (
 	runewidth "github.com/mattn/go-runewidth"
 )
 
-// Hack to write the prefix raw
-var RawPrefix bool
-
 // Render to render prompt information from state of Buffer.
 type Render struct {
 	out                ConsoleWriter
