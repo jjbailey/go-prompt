@@ -56,7 +56,7 @@ func (r *Render) getCurrentPrefix() string {
 }
 
 func (r *Render) renderPrefix() {
-	if rawPrefix {
+	if RawPrefix {
 		r.out.WriteRawStr(r.getCurrentPrefix())
 		return
 	}
