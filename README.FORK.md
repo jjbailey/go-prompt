@@ -1,7 +1,7 @@
 # go-prompt
 
 This repository is a fork of github.com/c-bata/go-prompt, written to add
-a minor change to the prompt.go file.
+minor changes to go-prompt's behavior.
 
 In the c-bata implementation, to exit a prompt without taking any action,
 users must press [ENTER] with no other input at the prompt, in other words,
