@@ -8,7 +8,7 @@ import (
 )
 
 // Hack to write the prefix raw
-var rawPrefix bool
+var RawPrefix bool
 
 // Render to render prompt information from state of Buffer.
 type Render struct {
