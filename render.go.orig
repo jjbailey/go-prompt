@@ -7,9 +7,6 @@ import (
 	runewidth "github.com/mattn/go-runewidth"
 )
 
-// Hack to write the prefix raw
-var rawPrefix bool
-
 // Render to render prompt information from state of Buffer.
 type Render struct {
 	out                ConsoleWriter
@@ -59,10 +56,6 @@ func (r *Render) getCurrentPrefix() string {
 }
 
 func (r *Render) renderPrefix() {
-	if rawPrefix {
-		r.out.WriteRawStr(r.getCurrentPrefix())
-		return
-	}
 	r.out.SetColor(r.prefixTextColor, r.prefixBGColor, false)
 	r.out.WriteStr(r.getCurrentPrefix())
 	r.out.SetColor(DefaultColor, DefaultColor, false)
