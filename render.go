@@ -14,6 +14,7 @@ type Render struct {
 	livePrefixCallback func() (prefix string, useLivePrefix bool)
 	breakLineCallback  func(*Document)
 	title              string
+	hasTitleSet        bool
 	row                uint16
 	col                uint16
 
@@ -42,6 +43,7 @@ type Render struct {
 func (r *Render) Setup() {
 	if r.title != "" {
 		r.out.SetTitle(r.title)
+		r.hasTitleSet = true
 		debug.AssertNoError(r.out.Flush())
 	}
 }
@@ -67,7 +69,9 @@ func (r *Render) renderPrefix() {
 
 // TearDown to clear title and erasing.
 func (r *Render) TearDown() {
-	r.out.ClearTitle()
+	if r.hasTitleSet {
+		r.out.ClearTitle()
+	}
 	r.out.EraseDown()
 	debug.AssertNoError(r.out.Flush())
 }
