@@ -11,10 +11,11 @@ import (
 type Render struct {
 	out                ConsoleWriter
 	prefix             string
-	livePrefixCallback func() (prefix string, useLivePrefix bool)
+	livePrefixCallback func() (string, bool)
 	breakLineCallback  func(*Document)
 	title              string
 	hasTitleSet        bool
+	disableTitle       bool
 	row                uint16
 	col                uint16
 
@@ -41,7 +42,7 @@ type Render struct {
 
 // Setup to initialize console output.
 func (r *Render) Setup() {
-	if r.title != "" {
+	if !r.disableTitle && r.title != "" {
 		r.out.SetTitle(r.title)
 		r.hasTitleSet = true
 		debug.AssertNoError(r.out.Flush())
@@ -69,7 +70,7 @@ func (r *Render) renderPrefix() {
 
 // TearDown to clear title and erasing.
 func (r *Render) TearDown() {
-	if r.hasTitleSet {
+	if !r.disableTitle && r.hasTitleSet {
 		r.out.ClearTitle()
 	}
 	r.out.EraseDown()
@@ -100,7 +101,7 @@ func (r *Render) renderWindowTooSmall() {
 
 func (r *Render) renderCompletion(buf *Buffer, completions *CompletionManager) {
 	suggestions := completions.GetSuggestions()
-	if len(completions.GetSuggestions()) == 0 {
+	if len(suggestions) == 0 {
 		return
 	}
 	prefix := r.getCurrentPrefix()
@@ -266,8 +267,19 @@ func (r *Render) move(from, to int) int {
 	fromX, fromY := r.toPos(from)
 	toX, toY := r.toPos(to)
 
-	r.out.CursorUp(fromY - toY)
-	r.out.CursorBackward(fromX - toX)
+	rowDiff := toY - fromY
+	if rowDiff > 0 {
+		r.out.CursorDown(rowDiff)
+	} else if rowDiff < 0 {
+		r.out.CursorUp(-rowDiff)
+	}
+
+	colDiff := toX - fromX
+	if colDiff > 0 {
+		r.out.CursorForward(colDiff)
+	} else if colDiff < 0 {
+		r.out.CursorBackward(-colDiff)
+	}
 	return to
 }
 

@@ -1,10 +1,7 @@
-// +build !windows
-
 package prompt
 
 import (
 	"reflect"
-	"syscall"
 	"testing"
 )
 
@@ -12,8 +9,6 @@ func TestFormatCompletion(t *testing.T) {
 	scenarioTable := []struct {
 		scenario      string
 		completions   []Suggest
-		prefix        string
-		suffix        string
 		expected      []Suggest
 		maxWidth      int
 		expectedWidth int
@@ -26,8 +21,6 @@ func TestFormatCompletion(t *testing.T) {
 				{Text: "insert"},
 				{Text: "where"},
 			},
-			prefix: " ",
-			suffix: " ",
 			expected: []Suggest{
 				{Text: " select "},
 				{Text: " from   "},
@@ -45,8 +38,6 @@ func TestFormatCompletion(t *testing.T) {
 				{Text: "insert", Description: "insert description"},
 				{Text: "where", Description: "where description"},
 			},
-			prefix: " ",
-			suffix: " ",
 			expected: []Suggest{
 				{Text: " select ", Description: " select description "},
 				{Text: " from   ", Description: " from description   "},
@@ -69,13 +60,19 @@ func TestFormatCompletion(t *testing.T) {
 	}
 }
 
+type MockConsoleWriter struct {
+	VT100Writer
+}
+
+func (w *MockConsoleWriter) Flush() error {
+	return nil
+}
+
 func TestBreakLineCallback(t *testing.T) {
 	var i int
 	r := &Render{
-		prefix: "> ",
-		out: &PosixWriter{
-			fd: syscall.Stdin, // "write" to stdin just so we don't mess with the output of the tests
-		},
+		prefix:                       "> ",
+		out:                          &MockConsoleWriter{},
 		livePrefixCallback:           func() (string, bool) { return "", false },
 		prefixTextColor:              Blue,
 		prefixBGColor:                DefaultColor,

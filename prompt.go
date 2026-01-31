@@ -147,6 +147,7 @@ func (p *Prompt) feed(b []byte) (shouldExit bool, exec *Exec) {
 			if newBuf, changed := p.history.Older(p.buf); changed {
 				p.buf = newBuf
 			}
+			return
 		}
 	case Down, ControlN:
 		if !completing { // Don't use p.completion.Completing() because it takes double operation when switch to selected=-1.

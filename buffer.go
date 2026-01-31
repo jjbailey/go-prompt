@@ -47,12 +47,16 @@ func (b *Buffer) InsertText(v string, overwrite bool, moveCursor bool) {
 	oc := b.cursorPosition
 
 	if overwrite {
-		overwritten := string(or[oc : oc+len(v)])
+		end := oc + len([]rune(v))
+		if end > len(or) {
+			end = len(or)
+		}
+		overwritten := string(or[oc:end])
 		if strings.Contains(overwritten, "\n") {
 			i := strings.IndexAny(overwritten, "\n")
 			overwritten = overwritten[:i]
 		}
-		b.setText(string(or[:oc]) + v + string(or[oc+len(overwritten):]))
+		b.setText(string(or[:oc]) + v + string(or[oc+len([]rune(overwritten)):]))
 	} else {
 		b.setText(string(or[:oc]) + v + string(or[oc:]))
 	}
@@ -155,8 +159,12 @@ func (b *Buffer) NewLine(copyMargin bool) {
 func (b *Buffer) Delete(count int) (deleted string) {
 	r := []rune(b.Text())
 	if b.cursorPosition < len(r) {
-		deleted = b.Document().TextAfterCursor()[:count]
-		b.setText(string(r[:b.cursorPosition]) + string(r[b.cursorPosition+len(deleted):]))
+		end := b.cursorPosition + count
+		if end > len(r) {
+			end = len(r)
+		}
+		deleted = string(r[b.cursorPosition:end])
+		b.setText(string(r[:b.cursorPosition]) + string(r[end:]))
 	}
 	return
 }
@@ -174,9 +182,12 @@ func (b *Buffer) JoinNextLine(separator string) {
 // SwapCharactersBeforeCursor swaps the last two characters before the cursor.
 func (b *Buffer) SwapCharactersBeforeCursor() {
 	if b.cursorPosition >= 2 {
-		x := b.Text()[b.cursorPosition-2 : b.cursorPosition-1]
-		y := b.Text()[b.cursorPosition-1 : b.cursorPosition]
-		b.setText(b.Text()[:b.cursorPosition-2] + y + x + b.Text()[b.cursorPosition:])
+		r := []rune(b.Text())
+		x := r[b.cursorPosition-2]
+		y := r[b.cursorPosition-1]
+		r[b.cursorPosition-2] = y
+		r[b.cursorPosition-1] = x
+		b.setText(string(r))
 	}
 }
 
