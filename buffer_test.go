@@ -40,17 +40,17 @@ func TestBuffer_CursorMovement(t *testing.T) {
 		t.Errorf("Text should be %#v, got %#v", "some_teAxt", b.Text())
 	}
 	if b.cursorPosition != len("some_teA") {
-		t.Errorf("Text should be %#v, got %#v", len("some_teA"), b.cursorPosition)
+		t.Errorf("cursorPosition should be %#v, got %#v", len("some_teA"), b.cursorPosition)
 	}
 
 	// Moving over left character counts.
 	b.CursorLeft(100)
 	b.InsertText("A", false, true)
 	if b.Text() != "Asome_teAxt" {
-		t.Errorf("Text should be %#v, got %#v", "some_teAxt", b.Text())
+		t.Errorf("Text should be %#v, got %#v", "Asome_teAxt", b.Text())
 	}
 	if b.cursorPosition != len("A") {
-		t.Errorf("Text should be %#v, got %#v", len("some_teA"), b.cursorPosition)
+		t.Errorf("cursorPosition should be %#v, got %#v", len("A"), b.cursorPosition)
 	}
 
 	// TODO: Going right already at right end.

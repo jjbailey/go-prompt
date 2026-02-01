@@ -2,6 +2,7 @@ package prompt
 
 import (
 	"strings"
+	"unicode"
 	"unicode/utf8"
 
 	"github.com/jjbailey/go-prompt/internal/bisect"
@@ -277,7 +278,7 @@ func (d *Document) lineStartIndexes() []int {
 	lc := d.LineCount()
 	lengths := make([]int, lc)
 	for i, l := range d.Lines() {
-		lengths[i] = len(l)
+		lengths[i] = utf8.RuneCountInString(l)
 	}
 
 	// Calculate cumulative sums.
@@ -288,10 +289,8 @@ func (d *Document) lineStartIndexes() []int {
 		pos += l + 1
 		indexes[i+1] = pos
 	}
-	if lc > 1 {
-		// Pop the last item. (This is not a new line.)
-		indexes = indexes[:lc]
-	}
+	// Pop the last item. (This is not a new line.)
+	indexes = indexes[:lc]
 	return indexes
 }
 
@@ -335,7 +334,7 @@ func (d *Document) GetCursorRightPosition(count int) int {
 	if count < 0 {
 		return d.GetCursorLeftPosition(-count)
 	}
-	if len(d.CurrentLineAfterCursor()) > count {
+	if utf8.RuneCountInString(d.CurrentLineAfterCursor()) > count {
 		return count
 	}
 	return len([]rune(d.CurrentLineAfterCursor()))
@@ -405,19 +404,13 @@ func (d *Document) TranslateRowColToIndex(row int, column int) (index int) {
 
 	// python) result += max(0, min(col, len(line)))
 	if column > 0 || len(line) > 0 {
-		if column > len(line) {
-			index += len(line)
+		if column > utf8.RuneCountInString(line) {
+			index += utf8.RuneCountInString(line)
 		} else {
 			index += column
 		}
 	}
 
-	// Keep in range. (len(self.text) is included, because the cursor can be
-	// right after the end of the text as well.)
-	// python) result = max(0, min(result, len(self.text)))
-	if index > len(d.Text) {
-		index = len(d.Text)
-	}
 	if index < 0 {
 		index = 0
 	}
@@ -435,7 +428,7 @@ func (d *Document) GetEndOfLinePosition() int {
 }
 
 func (d *Document) leadingWhitespaceInCurrentLine() (margin string) {
-	trimmed := strings.TrimSpace(d.CurrentLine())
+	trimmed := strings.TrimLeftFunc(d.CurrentLine(), unicode.IsSpace)
 	margin = d.CurrentLine()[:len(d.CurrentLine())-len(trimmed)]
 	return
 }

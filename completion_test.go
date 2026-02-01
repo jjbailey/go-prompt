@@ -33,12 +33,12 @@ func TestFormatShortSuggestion(t *testing.T) {
 				{Text: "coconut", Description: "This is coconut."},
 			},
 			expected: []Suggest{
-				{Text: " apple   ", Description: " This is apple.   "},
+				{Text: " apple   ", Description: " This is apple.  "},
 				{Text: " banana  ", Description: " This is banana.  "},
 				{Text: " coconut ", Description: " This is coconut. "},
 			},
 			max:     100,
-			exWidth: len(" apple   " + " This is apple.   "),
+			exWidth: len(" apple   " + " This is apple.  "),
 		},
 		{
 			in: []Suggest{

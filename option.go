@@ -29,6 +29,14 @@ func OptionTitle(x string) Option {
 	}
 }
 
+// OptionDisableTitle disables setting the terminal title.
+func OptionDisableTitle() Option {
+	return func(p *Prompt) error {
+		p.renderer.disableTitle = true
+		return nil
+	}
+}
+
 // OptionPrefix to set prefix string.
 func OptionPrefix(x string) Option {
 	return func(p *Prompt) error {

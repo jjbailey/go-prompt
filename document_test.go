@@ -226,10 +226,10 @@ func TestDocument_DisplayCursorPosition(t *testing.T) {
 	}{
 		{
 			document: &Document{
-				Text:           "hello",
-				cursorPosition: 2,
+				Text:           "あいうえお かきくけこ",
+				cursorPosition: 5,
 			},
-			expected: 2,
+			expected: 6,
 		},
 		{
 			document: &Document{
@@ -556,7 +556,7 @@ func TestDocument_FindStartOfPreviousWord(t *testing.T) {
 				Text:           "apply -f ./file/foo.json",
 				cursorPosition: len("apply -f ./"),
 			},
-			expected: len("apply -f ./"),
+			expected: 6,
 			sep:      " /",
 		},
 		{
@@ -705,7 +705,7 @@ func TestDocument_GetWordAfterCursor(t *testing.T) {
 				Text:           "apply -f ./file/foo.json",
 				cursorPosition: len("apply -f ."),
 			},
-			expected: "",
+			expected: "file/",
 			sep:      " /",
 		},
 		{
@@ -783,7 +783,7 @@ func TestDocument_GetWordAfterCursorWithSpace(t *testing.T) {
 				Text:           "/path/to/file",
 				cursorPosition: len("/path/"),
 			},
-			expected: "to",
+			expected: "to/file",
 			sep:      " /",
 		},
 		{
@@ -883,7 +883,7 @@ func TestDocument_FindEndOfCurrentWord(t *testing.T) {
 				Text:           "apply -f ./file/foo.json",
 				cursorPosition: len("apply -f ."),
 			},
-			expected: len(""),
+			expected: 5,
 			sep:      " /",
 		},
 		{
