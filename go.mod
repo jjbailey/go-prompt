@@ -1,6 +1,6 @@
 module github.com/jjbailey/go-prompt
 
-go 1.24.12
+go 1.24.13
 
 require (
 	github.com/mattn/go-colorable v0.1.14
@@ -12,6 +12,6 @@ require (
 
 require (
 	github.com/clipperhouse/stringish v0.1.1 // indirect
-	github.com/clipperhouse/uax29/v2 v2.4.0 // indirect
+	github.com/clipperhouse/uax29/v2 v2.5.0 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 )
