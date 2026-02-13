@@ -5,10 +5,13 @@ to go-prompt's behavior.
 
 - In the c-bata implementation, to exit a prompt without taking any action,
 users must press [ENTER] with no other input at the prompt, in other words, enter
-a blank line. With this change to prompt.go, the flag prompt.BackedOut enables
-users to press [BACKSPACE] on an empty line and achieve the same result. This UX
-behavior is similar to other Linux programs, such as Vim, which enable users to
-backspace out of prompts.
+a blank line. The new variable prompt.BackedOut is a global boolean flag that
+communicates to the caller how the prompt was exited. Specifically, it is set to
+true if and only if the user presses [BACKSPACE] and the input buffer is currently
+empty. When these conditions are met, the prompt loop terminates immediately,
+allowing the calling code to detect this specific exit condition and distinguish
+it from pressing [ENTER] on an empty line. This UX behavior is similar to other
+Linux programs, such as Vim, which enable users to backspace out of prompts.
 
 - In the c-bata implementation, renderPrefix() has two issues: it does not allow
 escape sequences in the prefix, and it sets the prefix color, potentially to a
@@ -20,5 +23,4 @@ sets the title to an empty string if it is not explicitly set with OptionTitle.
 
 ### Other Changes
 
-- Upgrade Golang from version 1.14 to 1.24.12
-- Cline found several minor issues
+- Upgrade Golang from version 1.14 to 1.24.12 - Cline found several minor issues
