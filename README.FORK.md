@@ -23,4 +23,6 @@ sets the title to an empty string if it is not explicitly set with OptionTitle.
 
 ### Other Changes
 
-- Upgrade Golang from version 1.14 to 1.24.12 - Cline found several minor issues
+- Upgrade Golang from version 1.14 to 1.25.7
+
+- Cline found several minor issues
