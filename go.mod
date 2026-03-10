@@ -7,7 +7,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.20
 	github.com/mattn/go-tty v0.0.7
 	github.com/pkg/term v1.2.0-beta.2
-	golang.org/x/sys v0.41.0
+	golang.org/x/sys v0.42.0
 )
 
 require (
