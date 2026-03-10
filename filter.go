@@ -1,6 +1,9 @@
 package prompt
 
-import "strings"
+import (
+	"strings"
+	"unicode/utf8"
+)
 
 // Filter is the type to filter the prompt.Suggestion array.
 type Filter func([]Suggest, string, bool) []Suggest
@@ -29,16 +32,15 @@ func FilterFuzzy(completions []Suggest, sub string, ignoreCase bool) []Suggest {
 }
 
 func fuzzyMatch(s, sub string) bool {
-	sChars := []rune(s)
 	sIdx := 0
 
-	// https://staticcheck.io/docs/checks#S1029
 	for _, c := range sub {
 		found := false
-		for ; sIdx < len(sChars); sIdx++ {
-			if sChars[sIdx] == c {
+		for sIdx < len(s) {
+			r, size := utf8.DecodeRuneInString(s[sIdx:])
+			sIdx += size
+			if r == c {
 				found = true
-				sIdx++
 				break
 			}
 		}
