@@ -5,7 +5,6 @@ package term
 import (
 	"syscall"
 
-	"github.com/pkg/term/termios"
 	"golang.org/x/sys/unix"
 )
 
@@ -25,5 +24,5 @@ func SetRaw(fd int) error {
 	n.Cc[syscall.VMIN] = 1
 	n.Cc[syscall.VTIME] = 0
 
-	return termios.Tcsetattr(uintptr(fd), termios.TCSANOW, (*unix.Termios)(n))
+	return unix.IoctlSetTermios(fd, unix.TCSETS, n)
 }

@@ -5,7 +5,6 @@ package term
 import (
 	"sync"
 
-	"github.com/pkg/term/termios"
 	"golang.org/x/sys/unix"
 )
 
@@ -19,7 +18,7 @@ func getOriginalTermios(fd int) (*unix.Termios, error) {
 	var err error
 	saveTermiosOnce.Do(func() {
 		saveTermiosFD = fd
-		saveTermios, err = termios.Tcgetattr(uintptr(fd))
+		saveTermios, err = unix.IoctlGetTermios(fd, unix.TCGETS)
 	})
 	return saveTermios, err
 }
@@ -30,5 +29,5 @@ func Restore() error {
 	if err != nil {
 		return err
 	}
-	return termios.Tcsetattr(uintptr(saveTermiosFD), termios.TCSANOW, o)
+	return unix.IoctlSetTermios(saveTermiosFD, unix.TCSETS, o)
 }
