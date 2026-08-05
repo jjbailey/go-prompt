@@ -78,10 +78,10 @@ func (r *Render) TearDown() {
 }
 
 func (r *Render) prepareArea(lines int) {
-	for i := 0; i < lines; i++ {
+	for range lines {
 		r.out.ScrollDown()
 	}
-	for i := 0; i < lines; i++ {
+	for range lines {
 		r.out.ScrollUp()
 	}
 }
@@ -112,10 +112,7 @@ func (r *Render) renderCompletion(buf *Buffer, completions *CompletionManager) {
 	// +1 means a width of scrollbar.
 	width++
 
-	windowHeight := len(formatted)
-	if windowHeight > int(completions.max) {
-		windowHeight = int(completions.max)
-	}
+	windowHeight := min(len(formatted), int(completions.max))
 	formatted = formatted[completions.verticalScroll : completions.verticalScroll+windowHeight]
 	r.prepareArea(windowHeight)
 

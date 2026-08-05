@@ -350,10 +350,7 @@ func (d *Document) GetCursorUpPosition(count int, preferredColumn int) int {
 		col = preferredColumn
 	}
 
-	row := d.CursorPositionRow() - count
-	if row < 0 {
-		row = 0
-	}
+	row := max(d.CursorPositionRow()-count, 0)
 	return d.TranslateRowColToIndex(row, col) - d.cursorPosition
 }
 

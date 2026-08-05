@@ -47,10 +47,7 @@ func (b *Buffer) InsertText(v string, overwrite bool, moveCursor bool) {
 	oc := b.cursorPosition
 
 	if overwrite {
-		end := oc + len([]rune(v))
-		if end > len(or) {
-			end = len(or)
-		}
+		end := min(oc+len([]rune(v)), len(or))
 		overwritten := string(or[oc:end])
 		if strings.Contains(overwritten, "\n") {
 			i := strings.IndexAny(overwritten, "\n")
@@ -76,11 +73,7 @@ func (b *Buffer) setText(v string) {
 
 // Set cursor position. Return whether it changed.
 func (b *Buffer) setCursorPosition(p int) {
-	if p > 0 {
-		b.cursorPosition = p
-	} else {
-		b.cursorPosition = 0
-	}
+	b.cursorPosition = max(p, 0)
 }
 
 func (b *Buffer) setDocument(d *Document) {
@@ -133,10 +126,7 @@ func (b *Buffer) DeleteBeforeCursor(count int) (deleted string) {
 	r := []rune(b.Text())
 
 	if b.cursorPosition > 0 {
-		start := b.cursorPosition - count
-		if start < 0 {
-			start = 0
-		}
+		start := max(b.cursorPosition-count, 0)
 		deleted = string(r[start:b.cursorPosition])
 		b.setDocument(&Document{
 			Text:           string(r[:start]) + string(r[b.cursorPosition:]),
@@ -159,10 +149,7 @@ func (b *Buffer) NewLine(copyMargin bool) {
 func (b *Buffer) Delete(count int) (deleted string) {
 	r := []rune(b.Text())
 	if b.cursorPosition < len(r) {
-		end := b.cursorPosition + count
-		if end > len(r) {
-			end = len(r)
-		}
+		end := min(b.cursorPosition+count, len(r))
 		deleted = string(r[b.cursorPosition:end])
 		b.setText(string(r[:b.cursorPosition]) + string(r[end:]))
 	}

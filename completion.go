@@ -92,10 +92,7 @@ func (c *CompletionManager) Completing() bool {
 }
 
 func (c *CompletionManager) update() {
-	max := int(c.max)
-	if len(c.tmp) < max {
-		max = len(c.tmp)
-	}
+	max := min(len(c.tmp), int(c.max))
 
 	if c.selected >= len(c.tmp) {
 		c.Reset()
@@ -119,7 +116,7 @@ func formatTexts(o []string, max int, prefix, suffix string) (new []string, widt
 	lenSuffix := runewidth.StringWidth(suffix)
 	lenShorten := runewidth.StringWidth(shortenSuffix)
 	min := lenPrefix + lenSuffix + lenShorten
-	for i := 0; i < l; i++ {
+	for i := range l {
 		o[i] = deleteBreakLineCharacters(o[i])
 
 		w := runewidth.StringWidth(o[i])
@@ -138,7 +135,7 @@ func formatTexts(o []string, max int, prefix, suffix string) (new []string, widt
 		width = max - lenPrefix - lenSuffix
 	}
 
-	for i := 0; i < l; i++ {
+	for i := range l {
 		x := runewidth.StringWidth(o[i])
 		if x <= width {
 			spaces := strings.Repeat(" ", width-x)
@@ -158,11 +155,11 @@ func formatSuggestions(suggests []Suggest, max int) (new []Suggest, width int) {
 	new = make([]Suggest, num)
 
 	left := make([]string, num)
-	for i := 0; i < num; i++ {
+	for i := range num {
 		left[i] = suggests[i].Text
 	}
 	right := make([]string, num)
-	for i := 0; i < num; i++ {
+	for i := range num {
 		right[i] = suggests[i].Description
 	}
 
@@ -172,7 +169,7 @@ func formatSuggestions(suggests []Suggest, max int) (new []Suggest, width int) {
 	}
 	right, rightWidth := formatTexts(right, max-leftWidth, rightPrefix, rightSuffix)
 
-	for i := 0; i < num; i++ {
+	for i := range num {
 		new[i] = Suggest{Text: left[i], Description: right[i]}
 	}
 	return new, leftWidth + rightWidth
