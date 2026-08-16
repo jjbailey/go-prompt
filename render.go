@@ -90,6 +90,12 @@ func (r *Render) prepareArea(lines int) {
 func (r *Render) UpdateWinSize(ws *WinSize) {
 	r.row = ws.Row
 	r.col = ws.Col
+	if r.col == 0 {
+		// Some pseudo ttys (e.g. within a docker container, or under CI/tmux)
+		// report 0 columns before the real size is negotiated. toPos and
+		// lineWrap divide by r.col, so guard against a divide-by-zero panic.
+		r.col = 1
+	}
 }
 
 func (r *Render) renderWindowTooSmall() {
