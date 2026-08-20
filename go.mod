@@ -1,10 +1,10 @@
 module github.com/jjbailey/go-prompt
 
-go 1.26.6
+go 1.27.0
 
 require (
 	github.com/mattn/go-colorable v0.1.15
-	github.com/mattn/go-runewidth v0.0.27
+	github.com/mattn/go-runewidth v0.0.28
 	github.com/mattn/go-tty v0.0.8
 	golang.org/x/sys v0.47.0
 )
